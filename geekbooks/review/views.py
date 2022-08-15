@@ -4,6 +4,7 @@ import json
 from .serializers import ReviewSerializer
 from book.serializers import BookSerializer
 from .models import Review, Book
+from book.views import BookViewset
 
 class ReviewViewset(APIView):
     queryset = Review.objects.all()
@@ -18,6 +19,26 @@ class ReviewViewset(APIView):
         return Response(data)
 
     def post(self, request, format=None):
-        # user_id = self.request.user
-        print(request.data['test'])
-        return Response({'it worked': "message"})
+        user_id = self.request.user
+        received_json_data=json.loads(request.body)
+
+        geekbooks_review_data = request.data["geekbooksReviewData"]
+
+        try:
+            book_id = Book.objects.get(book_id = received_json_data['id'])
+        except:
+            BookViewset.create_book(self, received_json_data)
+            book_id = Book.objects.get(book_id = received_json_data['id'])
+        
+        try: 
+            Review.objects.create(
+                book = book_id,
+                user = user_id,
+                rating = int(geekbooks_review_data["rating"]),
+                review_title = geekbooks_review_data["review_title"],
+                review_body = geekbooks_review_data["review_body"],
+            )
+            response = {"Success": "Review created"}
+        except:
+            response = {"Error": "Review not created"}
+        return Response(response)
