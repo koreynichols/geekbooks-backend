@@ -15,7 +15,8 @@ class FavoriteViewset(APIView):
     # permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, format=None):
-        user_id = self.request.user
+        print(self.request)
+        user_id = self.request.user.id
 
         user_favorites = Favorite.objects.filter(user=user_id)
         data = list(FavoriteSerializer(user_favorites, many=True).data)

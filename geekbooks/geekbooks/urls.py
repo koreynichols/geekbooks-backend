@@ -19,5 +19,6 @@ urlpatterns = [
     path('api/reviews/', review_views.ReviewViewset.as_view(), name="review"),
     path('google-api/', api_views.index, name='index'),
     path('admin/', admin.site.urls),
+    path('account/', include('account.urls')),
     path('', include(router.urls)),
 ]
