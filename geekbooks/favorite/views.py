@@ -6,6 +6,7 @@ from .models import Favorite
 import json
 from .models import Book
 from book.views import BookViewset
+from book.serializers import BookSerializer
 
 class FavoriteViewset(APIView):
 
@@ -19,6 +20,7 @@ class FavoriteViewset(APIView):
         user_id = self.request.user.id
 
         user_favorites = Favorite.objects.filter(user=user_id)
+        print(user_favorites)
         data = list(FavoriteSerializer(user_favorites, many=True).data)
 
         return Response(data)

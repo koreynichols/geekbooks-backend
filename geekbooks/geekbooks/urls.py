@@ -7,6 +7,7 @@ from rest_framework_simplejwt import views as jwt_views
 from book import views as book_views
 from review import views as review_views
 from favorite import views as favorite_views
+from account.views import LogoutView
 from api import views as api_views
 
 router = routers.DefaultRouter()
@@ -20,5 +21,6 @@ urlpatterns = [
     path('google-api/', api_views.index, name='index'),
     path('admin/', admin.site.urls),
     path('account/', include('account.urls')),
+    path('logout/', LogoutView.as_view(), name='auth_logout'),
     path('', include(router.urls)),
 ]

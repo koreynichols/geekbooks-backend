@@ -7,7 +7,7 @@ from .models import Book
 book_fields_dict = {
     'id': None,
     'selfLink': None,
-    'previewLink': None,
+    'thumbnail': None,
     'authors': None,
     'title': None,
     'listPrice': None,
@@ -19,7 +19,8 @@ book_fields_dict = {
 }
 
 keysToFind = ['id', 'selfLink']
-nestedKeysToFind = ['previewLink', 'authors', 'title', 'description', 'publisher', 'publishedDate', 'pageCount', 'categories']
+nestedKeysToFind = ['authors', 'title', 'description', 'publisher', 'publishedDate', 'pageCount', 'categories']
+imageKeyToFind = 'thumbnail'
 priceKeyToFind = 'listPrice'
 class BookViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
@@ -42,6 +43,11 @@ class BookViewset(viewsets.ModelViewSet):
                     book_fields_dict[key] = None
 
             try:
+                book_fields_dict[imageKeyToFind] = data['volumeInfo']['imageLinks'][imageKeyToFind]
+            except:
+                book_fields_dict[imageKeyToFind] = None
+
+            try:
                 book_fields_dict[priceKeyToFind] = data['saleInfo']['listPrice'][priceKeyToFind]
             except:
                 book_fields_dict[priceKeyToFind] = None
@@ -54,7 +60,7 @@ class BookViewset(viewsets.ModelViewSet):
         Book.objects.create(
                 book_id = book_fields_dict['id'] or None,
                 book_url = book_fields_dict['selfLink'] or None,
-                cover_image = book_fields_dict['previewLink'] or None,
+                cover_image = book_fields_dict['thumbnail'] or None,
                 author = book_fields_dict['authors'] or None,
                 title = book_fields_dict['title'] or None,
                 price = book_fields_dict['listPrice'] or None,

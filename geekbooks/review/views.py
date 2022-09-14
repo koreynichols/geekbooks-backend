@@ -13,6 +13,8 @@ class ReviewViewset(APIView):
     def get(self, request):
         data_book_id = request.data['book_id']
         book = Book.objects.filter(book_id=data_book_id)
+        if not book:
+            return Response('No book exists')
         book_id = book[0].id
         reviews = Review.objects.filter(book = book_id)
         data = list(ReviewSerializer(reviews, many=True).data)
