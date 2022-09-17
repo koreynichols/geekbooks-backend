@@ -20,7 +20,11 @@ class FavoriteViewset(APIView):
         user_id = self.request.user.id
 
         user_favorites = Favorite.objects.filter(user=user_id)
-        print(user_favorites)
+        user_favorites = user_favorites.filter(is_favorite=True)
+        try:
+            user_favorites = user_favorites.filter(book__book_id = request.data["book_id"])
+        except:
+            print("No book ID")
         data = list(FavoriteSerializer(user_favorites, many=True).data)
 
         return Response(data)
