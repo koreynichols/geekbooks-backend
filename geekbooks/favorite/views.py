@@ -27,6 +27,8 @@ class FavoriteViewset(APIView):
             print("No book ID")
         data = list(FavoriteSerializer(user_favorites, many=True).data)
 
+        print(data)
+
         return Response(data)
 
 
@@ -34,6 +36,7 @@ class FavoriteViewset(APIView):
 
         user_id = self.request.user
         received_json_data=json.loads(request.body)
+        received_json_data=received_json_data["book"]
 
         try:
             book_id = Book.objects.get(book_id = received_json_data['id'])

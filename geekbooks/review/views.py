@@ -11,7 +11,8 @@ class ReviewViewset(APIView):
     serializer_class = ReviewSerializer
 
     def get(self, request):
-        data_book_id = request.data['book_id']
+        print("book: ", request.GET.get('book_id'))
+        data_book_id = request.GET.get('book_id')
         book = Book.objects.filter(book_id=data_book_id)
         if not book:
             return Response('No book exists')
