@@ -17,7 +17,7 @@ class ReviewViewset(APIView):
         if not book:
             return Response('No book exists')
         book_id = book[0].id
-        reviews = Review.objects.filter(book = book_id)
+        reviews = Review.objects.filter(book = book_id).order_by('-date_created')
         data = list(ReviewSerializer(reviews, many=True).data)
         return Response(data)
 
