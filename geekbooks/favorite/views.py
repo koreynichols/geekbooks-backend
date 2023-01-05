@@ -16,18 +16,22 @@ class FavoriteViewset(APIView):
     # permission_classes = [permissions.IsAdminUser]
 
     def get(self, request, format=None):
-        print(self.request)
         user_id = self.request.user.id
-
         user_favorites = Favorite.objects.filter(user=user_id)
         user_favorites = user_favorites.filter(is_favorite=True)
-        try:
-            user_favorites = user_favorites.filter(book__book_id = request.data["book_id"])
-        except:
-            print("No book ID")
-        data = list(FavoriteSerializer(user_favorites, many=True).data)
 
-        print(data)
+        if request.GET.get('book_id'):
+            user_favorites = user_favorites.filter(book__book_id = request.GET.get("book_id"))
+            print(user_favorites)
+            if user_favorites:
+                response = {'is_favorite': True}
+            else:
+                response = {'is_favorite': False}
+            return Response(response)
+        else:
+            print("No book ID")
+        print("userFavorite: ", user_favorites)
+        data = list(FavoriteSerializer(user_favorites, many=True).data)
 
         return Response(data)
 

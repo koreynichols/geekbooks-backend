@@ -24,22 +24,24 @@ class ReviewViewset(APIView):
     def post(self, request, format=None):
         user_id = self.request.user
         received_json_data=json.loads(request.body)
+        print(user_id)
+        print(received_json_data)
 
-        geekbooks_review_data = request.data["geekbooksReviewData"]
-
+        review_data = request.data["review"]
+        book_data = request.data["book"]
         try:
-            book_id = Book.objects.get(book_id = received_json_data['id'])
+            book_id = Book.objects.get(book_id = book_data['id'])
         except:
-            BookViewset.create_book(self, received_json_data)
-            book_id = Book.objects.get(book_id = received_json_data['id'])
+            BookViewset.create_book(self, book_data)
+            book_id = Book.objects.get(book_id = book_data['id'])
         
         try: 
             Review.objects.create(
                 book = book_id,
                 user = user_id,
-                rating = int(geekbooks_review_data["rating"]),
-                review_title = geekbooks_review_data["review_title"],
-                review_body = geekbooks_review_data["review_body"],
+                rating = int(review_data["rating"]),
+                review_title = review_data["review_title"],
+                review_body = review_data["review_body"],
             )
             response = {"Success": "Review created"}
         except:
