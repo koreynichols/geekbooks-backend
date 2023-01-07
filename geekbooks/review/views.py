@@ -18,17 +18,16 @@ class ReviewViewset(APIView):
             return Response('No book exists')
         book_id = book[0].id
         reviews = Review.objects.filter(book = book_id).order_by('-date_created')
+        print(reviews)
         data = list(ReviewSerializer(reviews, many=True).data)
         return Response(data)
 
     def post(self, request, format=None):
         user_id = self.request.user
         received_json_data=json.loads(request.body)
-        print(user_id)
-        print(received_json_data)
 
-        review_data = request.data["review"]
-        book_data = request.data["book"]
+        review_data = received_json_data["review"]
+        book_data = received_json_data["book"]
         try:
             book_id = Book.objects.get(book_id = book_data['id'])
         except:
@@ -36,14 +35,16 @@ class ReviewViewset(APIView):
             book_id = Book.objects.get(book_id = book_data['id'])
         
         try: 
-            Review.objects.create(
+            review = Review.objects.create(
                 book = book_id,
                 user = user_id,
                 rating = int(review_data["rating"]),
                 review_title = review_data["review_title"],
                 review_body = review_data["review_body"],
             )
-            response = {"Success": "Review created"}
+            serializer = ReviewSerializer(review)
+            # response = {"success": "it works"}
+            response = serializer.data
         except:
             response = {"Error": "Review not created"}
         return Response(response)

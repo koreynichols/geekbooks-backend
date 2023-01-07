@@ -3,7 +3,7 @@ from django.db.models import UniqueConstraint
 from book.models import Book
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-
+import datetime
 
 # Create your models here.
 class Review(models.Model):
@@ -12,7 +12,7 @@ class Review(models.Model):
     rating = models.IntegerField()
     review_title = models.TextField()
     review_body = models.TextField()
-    date_created = models.DateField(default=now)
+    date_created = models.DateField(default=datetime.date.today)
 
     class Meta: 
         constraints = [
