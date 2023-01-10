@@ -15,11 +15,13 @@ class ReviewViewset(APIView):
         data_book_id = request.GET.get('book_id')
         book = Book.objects.filter(book_id=data_book_id)
         if not book:
-            return Response('No book exists')
+            data = []
+            return Response(data)
         book_id = book[0].id
         reviews = Review.objects.filter(book = book_id).order_by('-date_created')
         print(reviews)
         data = list(ReviewSerializer(reviews, many=True).data)
+        print(data)
         return Response(data)
 
     def post(self, request, format=None):
