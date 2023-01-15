@@ -1,0 +1,20 @@
+databases:
+  - name: geekbooks
+    databaseName: geekbooks
+    user: geekbooks
+
+services:
+  - type: web
+    name: geekbooks-backend
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn mysite.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: geekbooks
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
