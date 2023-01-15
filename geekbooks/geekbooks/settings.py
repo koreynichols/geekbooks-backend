@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'favorite',
     'review',
     'account',
+    'genre',
+    'homebooklist',
 ]
 
 REST_FRAMEWORK = {
