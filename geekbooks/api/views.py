@@ -19,7 +19,7 @@ def index(request):
     url = url[:-1]
     url = url.replace(' ', '')
 
-    print(url)
+    url += '&maxResults=40'
 
     api_request = requests.get(url)
     try:
