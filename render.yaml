@@ -10,7 +10,7 @@ services:
     env: python
     plan: free
     buildCommand: "cd geekbooks && ./build.sh"
-    startCommand: "cd geekbooks && gunicorn mysite.wsgi:application"
+    startCommand: "cd geekbooks && gunicorn geekbooks.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
