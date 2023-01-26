@@ -2,11 +2,13 @@ databases:
   - name: geekbooks
     databaseName: geekbooks
     user: geekbooks
+    plan: free
 
 services:
   - type: web
     name: geekbooks-backend
     env: python
+    plan: free
     buildCommand: "cd geekbooks && ./build.sh"
     startCommand: "cd geekbooks && gunicorn mysite.wsgi:application"
     envVars:
